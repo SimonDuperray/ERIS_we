@@ -1,0 +1,36 @@
+{
+   "loss": [
+      7.908903121948242,
+      5.429606914520264
+   ],
+   "accuracy": [
+      0.30793821811676025,
+      0.33006465435028076
+   ],
+   "val_loss": [
+      7.333032608032227,
+      4.69668436050415
+   ],
+   "val_accuracy": [
+      0.33089080452919006,
+      0.45589080452919006
+   ],
+   "epochs": 2,
+   "df_length": 4350,
+   "percentage_true_neg": 0,
+   "batch_size": 300,
+   "input_vocab": {
+      "total_words": 32054,
+      "unique_words": 3090,
+      "max_in_sentence_length": 9,
+      "in_voc_size": 3089
+   },
+   "output_vocab": {
+      "total_words": 23345,
+      "unique_words": 3078,
+      "max_in_sentence_length": 8,
+      "in_voc_size": 3077
+   },
+   "to_predict": "author mrs ' otis sawayn '",
+   "prediction": "' ' <PAD> <PAD> <PAD> <PAD> <PAD> <PAD>"
+}
