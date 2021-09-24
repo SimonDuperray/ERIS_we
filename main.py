@@ -2,7 +2,7 @@ from Merger import Merger
 from RNN import RNNModel
 from Analyzer import Analyzer
 from ReportWriter import ReportWriter
-import keras.losses
+import tensorflow as tf
 
 
 # ====================
@@ -47,55 +47,6 @@ import keras.losses
 # analyzer.create_plots_figure(
 #     length_epochs_list=len(epochs)
 # )
-
-
-# ====================
-#   CREATE REPORTS
-# ====================
-def generate_header(epochs_list, batch_size, vocab_infos):
-    header = "# Experimental Report v.0\n"
-    # hyperparameters
-    header += "## Hyperparameters\n"
-    header += "* epochs list: " + str(epochs_list) + "\n"
-    header += "* batch_size: " + str(batch_size) + "\n"
-    header += "* dataset_length: " + str(merger.get_i_o_length()) + "\n"
-    header += "* percent of TN: " + str(merger.get_percent()) + "%\n"
-    header += "* percent of unique names: " + str("Unknown") + "\n"
-    # vocab infos
-    header += "## Vocab informations\n"
-    # input
-    header += "### Input vocabulary\n"
-    header += "* Total words: " + str(vocab_infos[0]['total_words']) + "\n"
-    header += "* Unique words: " + str(vocab_infos[0]['unique_words']) + "\n"
-    header += "* Max sequence length: " + str(vocab_infos[0]['max_io_sentence_length']) + "\n"
-    header += "* Vocab size: " + str(vocab_infos[0]['io_voc_size']) + "\n"
-    # output
-    header += "### Output vocabulary\n"
-    header += "* Total words: " + str(vocab_infos[1]['total_words']) + "\n"
-    header += "* Unique words: " + str(vocab_infos[1]['unique_words']) + "\n"
-    header += "* Max sequence length: " + str(vocab_infos[1]['max_io_sentence_length']) + "\n"
-    header += "* Vocab size: " + str(vocab_infos[1]['io_voc_size']) + "\n"
-
-    # iter epochs
-    header += "## Analysis of metrics for different number of epochs\n"
-    header += "Accuracy                   |  Loss\n"
-    header += ":-------------------------:|:-------------------------:\n"
-    header += "![Accuracy](/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/4350/acc.png)|  " \
-              "![Loss](/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/4350/loss.png)\n"
-
-    # for epoch in epochs_list:
-    header += "### " + str(epochs_list) + " epochs\n"
-    header += "![test](/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/4350/comp_acc_valacc_" + str(
-        epochs_list) + ".png)"
-    header += "![test](/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/4350/com_loss_valloss_" + str(
-        epochs_list) + ".png)\n"
-    header += "\nPrediction: blablabla\n"
-    header += "#### Observations:\n"
-    header += "Voici mes observations\n"
-
-    # to_return
-    return header
-
 
 # for epo in epochs:
 #     path = "./experimental_reports/"
@@ -152,9 +103,11 @@ for dataset in datasets:
 
     # report title
     report_title = "Experimental Report for dt_lgth:" + str(merger.dflgth)
+    filename = "experimental_report_"+str(merger.dflgth)+".md"
 
     # write the first page of the report
     report_writer.write_first_page(
+        filename=filename,
         title=report_title,
         iter_data=[gru_neurons, epochs],
         params={
@@ -189,7 +142,7 @@ for dataset in datasets:
                 learning_rate=1e-3,
                 dropout_value=0.5,
                 dense_neurons=256,
-                loss_function=keras.losses.sparse_categorical_crossentropy
+                loss_function=None
             )
     #
     #         # instanciate new Analyzer()

@@ -5,6 +5,7 @@ from keras.layers import GRU, Dense, TimeDistributed, Dropout
 from keras.layers.embeddings import Embedding
 from keras.utils.vis_utils import plot_model
 from tensorflow.keras.optimizers import Adam
+from keras.losses import sparse_categorical_crossentropy
 import collections
 import pandas as pd
 import numpy as np
@@ -131,7 +132,7 @@ class RNNModel:
         model.add(TimeDistributed(Dense(out_vocab_size, activation='softmax')))
 
         model.compile(
-            loss=loss_function,
+            loss=sparse_categorical_crossentropy,
             optimizer=Adam(learning_rate),
             metrics=['accuracy']
         )

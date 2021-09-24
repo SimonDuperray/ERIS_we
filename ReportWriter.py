@@ -4,17 +4,16 @@ class ReportWriter:
         self.path = "./experimental_reports"
         self.filename = ""
 
-    def write_first_page(self, title, iter_data, params, dtlgth):
-        self.filename = title+".md"
+    def write_first_page(self, filename, title, iter_data, params, dtlgth):
+        self.filename = filename
         fp = ""
         fp += "# "+title+"\n"
         fp += "\n---\n\n<center>\n\nTest on:\n"
         fp += "\nepochs: "+str(iter_data[0])+"\n"
         fp += "\ngru_neurons: "+str(iter_data[1])+"\n"
-        fp += "</center>\n\n---\n\n"
+        fp += "\n</center>\n\n---\n\n"
         fp += "# Parameters\n"
         for key in params:
-
             buffer = "\n* "+str(key)+": "+str(params[key])+"\n"
             fp += buffer
         fp += "<br>\n"
@@ -26,8 +25,9 @@ class ReportWriter:
             print("=====================================")
 
     def write_unique_epoch_page(self, gru_neuron, epoch,
-                                acc_valacc_figure, loss_valloss_figure,
+                                acc_valacc_absolute_path, loss_valloss_absolute_path,
                                 fitting_observations, predictions, bilan):
+        content = ""
         with open(self.path+"/"+self.filename, 'a') as md_file:
             pass
 
@@ -49,8 +49,10 @@ class ReportWriter:
 
         # add model plot
         lp += "\n# Plotted Model"
-        model_plot_path = "/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/"+str(dtlgth)+"/model_"+str(dtlgth)+".png"
-        lp += "\n![plot_model]("+model_plot_path+")"
+        # TODO
+        absolute_model_plot_path = "D:\\ERIS\dev_ia\\analysis\\compar_epochs\\"+str(dtlgth)+"\\model_"+str(dtlgth)+".png"
+        # model_plot_path = "/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/"+str(dtlgth)+"/model_"+str(dtlgth)+".png"
+        lp += "\n![plot_model]("+absolute_model_plot_path+")"
 
         with open(self.path+"/"+self.filename, "a") as md_file:
             md_file.write(lp)
