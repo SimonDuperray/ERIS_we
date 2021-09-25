@@ -10,6 +10,36 @@ class Analyzer:
     def __init__(self, epochs):
         self.epochs_list = epochs
 
+    def analyze_for_report(self, dir, file, dtlgth, path_acc, path_loss):
+        obj = {}
+        with open("./histories/"+str(dtlgth)+"/"+dir+"/"+file, 'r') as outfile:
+            data = json.load(outfile)
+            obj['epochs'] = [i+1 for i in range(data['epochs'])]
+            obj['accuracy'] = data['accuracy']
+            obj['val_accuracy'] = data['val_accuracy']
+            obj['loss'] = data['loss']
+            obj['val_loss'] = data['val_loss']
+
+        # acc / val_acc
+        plt.plot(obj['epochs'], obj['accuracy'], color='red')
+        plt.plot(obj['epochs'], obj['val_accuracy'], color='blue')
+        plt.title("Training and Validation Accuracy")
+        plt.xlabel('epochs')
+        plt.ylabel('accuracy')
+        plt.legend(['train_acc', 'val_acc'])
+        plt.savefig(path_acc)
+        plt.show()
+
+        # loss / val_loss
+        plt.plot(obj['epochs'], obj['loss'], color='red')
+        plt.plot(obj['epochs'], obj['val_loss'], color='blue')
+        plt.title("Training and Validation Loss")
+        plt.xlabel('epochs')
+        plt.ylabel('loss')
+        plt.legend(['train_loss', 'val_loss'])
+        plt.savefig(path_loss)
+        plt.show()
+
     def analyze_epochs(self, subfolder):
         list_of_dirs = listdir("./histories/"+subfolder)
         results = []

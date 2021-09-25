@@ -88,7 +88,7 @@ class ReportWriter:
         with open(self.path+"/"+self.filename, 'a') as md_file:
             md_file.write(content)
 
-    def write_last_page(self, dtlgth):
+    def write_last_page(self, dtlgth, gru_neuron):
         lp = ""
 
         # add model summary
@@ -108,7 +108,7 @@ class ReportWriter:
         lp += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"
         lp += "\n# Plotted Model"
         # TODO
-        absolute_model_plot_path = "D:\\ERIS\dev_ia\\analysis\\compar_epochs\\"+str(dtlgth)+"\\model_"+str(dtlgth)+".png"
+        absolute_model_plot_path = "D:\\ERIS\dev_ia\\analysis\\compar_epochs\\"+str(dtlgth)+"\\model_"+str(dtlgth)+"_"+str(gru_neuron)+".png"
         # model_plot_path = "/home/ing-angers/duperrsi/Documents/idm-ml/dev_ia/analysis/compar_epochs/"+str(dtlgth)+"/model_"+str(dtlgth)+".png"
         lp += "\n![plot_model]("+absolute_model_plot_path+")"
 

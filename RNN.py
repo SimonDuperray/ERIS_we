@@ -118,7 +118,8 @@ class RNNModel:
 
     def embed_model(self, input_shape, output_sequence_length,
                     in_vocab_size, out_vocab_size, learning_rate,
-                    gru_neurons, dropout_value, dense_neurons, loss_function):
+                    gru_neurons, dropout_value, dense_neurons, 
+                    loss_function, gru_neuron):
 
         learning_rate = learning_rate
         model = Sequential()
@@ -147,7 +148,7 @@ class RNNModel:
         # save ploted model
         plot_model(
             model,
-            to_file="./analysis/compar_epochs/"+str(self.df_length)+"/model_"+str(self.df_length)+".png",
+            to_file="./analysis/compar_epochs/"+str(self.df_length)+"/model_"+str(self.df_length)+"_"+str(gru_neuron)+".png",
             show_shapes=True,
             show_layer_names=True
         )
@@ -170,7 +171,7 @@ class RNNModel:
         return self.model.summary()
 
     def run(self, nb_epochs, batch_size, validation_split, dataset_path,
-            gru_neurons, learning_rate, dropout_value, dense_neurons, loss_function):
+            gru_neurons, learning_rate, dropout_value, dense_neurons, loss_function, gru_neuron):
 
         # read csv
         # TODO: check if dataset_path[-4]==csv
@@ -207,7 +208,8 @@ class RNNModel:
             gru_neurons=gru_neurons,
             dropout_value=dropout_value,
             dense_neurons=dense_neurons,
-            loss_function=loss_function
+            loss_function=loss_function,
+            gru_neuron=gru_neuron
         )
 
         history_const = embed_rnn_model.fit(

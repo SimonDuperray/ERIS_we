@@ -2,6 +2,8 @@ from Merger import Merger
 from RNN import RNNModel
 from Analyzer import Analyzer
 from ReportWriter import ReportWriter
+from os import listdir
+from os.path import join
 import tensorflow as tf
 
 # ========================
@@ -30,10 +32,10 @@ datasets = [
 ]
 
 # gru_neurons = [32, 64, 128, 256, 512]
-gru_neurons = [128]
+gru_neurons = [64, 128]
 
 # epochs = [i for i in range(10, 110, 10)]
-epochs = [2, 4]
+epochs = [2, 4, 6]
 
 for dataset in datasets:
     # create dataset
@@ -88,18 +90,47 @@ for dataset in datasets:
                 learning_rate=1e-3,
                 dropout_value=0.5,
                 dense_neurons=256,
-                loss_function=None
+                loss_function=None,
+                gru_neuron=gru_neuron
             )
-    #
-    #         # instanciate new Analyzer()
-    #         analyzer = Analyzer(epochs=epochs)  # OR EPOCH ?
-    #
-    #         # analyze metrics and save model and json files
-    #         analyzer.analyze_epochs(subfolder=str(merger.dflgth))
-    #
-    #         # create matplotlib graphs based on json files
-    #         # don't need it for the moment, but keep unique graph template to send it to the report
-    #         # analyzer.create_plots_figure(length_epochs_list=len(epochs))
+
+            # instanciate new Analyzer()
+            analyzer = Analyzer(epochs=epoch)  # OR EPOCH ?
+
+            # get current folder's name
+            directories = listdir("./histories/"+str(merger.dflgth))
+            for directory in directories:
+                if int(str(directory[2])) == epoch:
+                    dir=directory
+                    files = listdir(join("./histories/"+str(merger.dflgth)+"/", directory))
+                else:
+                    try:
+                        if int(str(directory[2])+str(directory[3])) == epoch:
+                            dir=directory
+                            files = listdir(join("./histories/"+str(merger.dflgth)+"/", directory))
+                        else:
+                            pass
+                    except ValueError as e:
+                        print(f"Error: {e}")
+
+                file = files[0] if files[0][-4:] == "json" else files[1]
+
+            # get path for acc and loss
+            path_acc = "./analysis/compar_epochs/"+str(merger.dflgth)+"/acc_valacc_"+str(epoch)+"_"+str(gru_neuron)+".png"
+            path_loss = "./analysis/compar_epochs/"+str(merger.dflgth)+"/loss_valloss_"+str(epoch)+"_"+str(gru_neuron)+".png"
+
+            # analyze metrics and save model and json files
+            analyzer.analyze_for_report(
+                dir=dir,
+                file=file,
+                dtlgth=merger.dflgth,
+                path_acc=path_acc,
+                path_loss=path_loss
+            )
+
+            # create matplotlib graphs based on json files
+            # don't need it for the moment, but keep unique graph template to send it to the report
+            # analyzer.create_plots_figure(length_epochs_list=len(epochs))
             
             curves_data = {
                 "accuracy": {
@@ -143,12 +174,15 @@ for dataset in datasets:
             report_writer.write_unique_epoch_page(
                 gru_neuron=gru_neuron,
                 epoch=epoch,
-                acc_valacc_absolute_path="../analysis/compar_epochs/4350/acc_valacc_10.png",
-                loss_valloss_absolute_path="../analysis/compar_epochs/4350/loss_valloss_10.png",
+                acc_valacc_absolute_path="."+path_acc,
+                loss_valloss_absolute_path="."+path_loss,
                 curves_data=curves_data,
                 fitting_observations=fitting_observations,
                 predictions=predictions,
                 bilan=bilan
             )
 
-    report_writer.write_last_page(str(merger.dflgth))
+        report_writer.write_last_page(
+            dtlgth=str(merger.dflgth),
+            gru_neuron=gru_neuron
+        )
