@@ -8,15 +8,26 @@ class ReportWriter:
         self.filename = filename
         fp = ""
         fp += "# "+title+"\n"
-        fp += "\n---\n\n<center>\n\nTest on:\n"
-        fp += "\nepochs: "+str(iter_data[0])+"\n"
-        fp += "\ngru_neurons: "+str(iter_data[1])+"\n"
-        fp += "\n</center>\n\n---\n\n"
+        # iter on params
+        fp += "\n\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Test on:\n"
+        fp += "\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**"+str(list(iter_data.keys())[0])+"**: "+str(iter_data[list(iter_data.keys())[0]])+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+        fp += "\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**"+str(list(iter_data.keys())[1])+"**: "+str(iter_data[list(iter_data.keys())[1]])+"\n"
+        # configuration
         fp += "# Parameters\n"
         for key in params:
             buffer = "\n* "+str(key)+": "+str(params[key])+"\n"
             fp += buffer
-        fp += "\n<br>\n"
+        # vocab infos
+        fp += "\n# Vocab infos"
+        fp += "\n\n|Metric|In vocab|Out vocab|"
+        fp += "\n|:------:|:------:|:-------:|"
+        fp += "\n|Total nb. of words|32054|23345|"
+        fp += "\n|Nb. of unique words|3090|3078|"
+        fp += "\n|Max seq. length|9|8|"
+        fp += "\n|Vocab size|3089|3077|"
+        fp += "\n|% True Negatives|24.1|24.1|"
+        fp += "\n|% no title|None|None|\n"
+        fp += "\n<br><br><br>\n"
 
         with open(self.path+"/"+self.filename, 'w') as md_file:
             md_file.write(fp)
@@ -42,7 +53,7 @@ class ReportWriter:
         content += "\n| minimum  | "+str(curves_data['accuracy']['tr_min'])+" | "+str(curves_data['accuracy']['val_min'])+" |"
         content += "\n| maximum  | "+str(curves_data['accuracy']['tr_max'])+" | "+str(curves_data['accuracy']['val_max'])+" |"
         content += "\n|   mean   | "+str(curves_data['accuracy']['tr_mean'])+" | "+str(curves_data['accuracy']['val_mean'])+" |\n"
-        content += "\n\n</center>\n\n"
+        content += "\n</center>\n\n"
         # loss
         content += "\n![loss plot]("+str(loss_valloss_absolute_path)+")\n"
         content += "\n\n<center>\n\n"
@@ -71,7 +82,8 @@ class ReportWriter:
 
         # bilan
         content += "\n## Bilan"
-        content += "\nFor "+str(gru_neuron)+" neurons in GRU and "+str(epoch)+" epochs, the training accuracy is gapped at "+str(bilan['gap_acc'])+", the training loss at "+str(bilan['gap_loss'])+". The model is "+str(bilan['fit_status'])+" and the prediction is correct at "+str(bilan['pred_percent'])+"%.\n"
+        content += "\nFor **"+str(gru_neuron)+"** neurons in GRU and **"+str(epoch)+"** epochs, the training accuracy is gapped at **"+str(bilan['gap_acc'])+"**, the training loss at **"+str(bilan['gap_loss'])+"**. The model is **"+str(bilan['fit_status'])+"** and the prediction is correct at **"+str(bilan['pred_percent'])+"%**.\n"
+        content += "<br><br>"
 
         with open(self.path+"/"+self.filename, 'a') as md_file:
             md_file.write(content)
@@ -93,6 +105,7 @@ class ReportWriter:
         lp += model_str
 
         # add model plot
+        lp += "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>"
         lp += "\n# Plotted Model"
         # TODO
         absolute_model_plot_path = "D:\\ERIS\dev_ia\\analysis\\compar_epochs\\"+str(dtlgth)+"\\model_"+str(dtlgth)+".png"

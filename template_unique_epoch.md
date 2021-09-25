@@ -31,3 +31,12 @@
 
 ## Bilan
 For 32 neurons in GRU and 10 epochs, the training accuracy is gapped at 0.67, the training loss at 0.67. The model is underfitted and the prediction is correct at 53%.
+
+|             Metric            | In vocab | Out vocab |
+|:-----------------------------:|:---------------:|:-------------:|
+| Total nb. of words            | 32054 | 23345 | 
+| Nb. of unique words           | 3090 | 3078 | 
+| Max seq. length               | 9    | 8 |
+| Vocab size                    | 3089 | 3077 | 
+| % True Negatives              | 24.1 | 24.1 |
+| % authors names without title | None | None |

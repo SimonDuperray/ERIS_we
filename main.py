@@ -33,7 +33,7 @@ datasets = [
 gru_neurons = [128]
 
 # epochs = [i for i in range(10, 110, 10)]
-epochs = [2, 5, 10]
+epochs = [2, 4]
 
 for dataset in datasets:
     # create dataset
@@ -55,7 +55,7 @@ for dataset in datasets:
     report_writer.write_first_page(
         filename=filename,
         title=report_title,
-        iter_data=[gru_neurons, epochs],
+        iter_data={"gru_neurons": gru_neurons, "epochs": epochs},
         params={
             "batch_size ": 300,
             "validation_split ": 0.2,
