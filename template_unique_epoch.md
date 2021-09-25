@@ -18,14 +18,16 @@
 |   mean   | 0.51                    | 0.52             |
 
 ## Fitting observations
-* Underfitting: Yes
-* Overfitting: No
-* Good fitting: Partially
+|        | Undefitting | Good fitting | Overfitting |
+|:------:|:-----------:|:------------:|:-----------:|
+| Status | Yes | Partially | No |
 
 ## Prediction
-* Sequence to predict: \<authors author:"John Da">
-* Expected prediction: author: 'John Da'
-* Predicted sequence: author: 'John Bu'
+
+|        | Seq. to predict | Expected seq. | Predicted seq. |
+|:------:|:---------------:|:-------------:|:--------------:|
+|        | <authors author:'John Du'/> | author: 'John Du' | author: 'Mr. John Da'|
+
 
 ## Bilan
 For 32 neurons in GRU and 10 epochs, the training accuracy is gapped at 0.67, the training loss at 0.67. The model is underfitted and the prediction is correct at 53%.

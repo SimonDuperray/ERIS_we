@@ -4,60 +4,6 @@ from Analyzer import Analyzer
 from ReportWriter import ReportWriter
 import tensorflow as tf
 
-
-# ====================
-#       MERGER
-# ====================
-# merger = Merger()
-# merger.run(
-#     path_1='./datasets/bibtex/correct.bibtex',
-#     path_2="./datasets/bibtex/not_correct_a.bibtex",
-#     path_3='./datasets/bibtex/not_correct_b.bibtex'
-# )
-
-# ==================== 
-#        PP+RNN
-# ====================
-# rnn_model = RNNModel()
-# rnn_model.set_percent(merger.get_percent())
-
-# ==================== 
-#  ITERATIVE TRANINGS
-# ====================
-# hyperparameters
-# epochs = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-# epochs = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-# epochs = [2, 4, 6]
-
-# for epo in epochs:
-#     rnn_model.run(
-#         nb_epochs=epo,
-#         batch_size=300,
-#         validation_split=0.2,
-#         dataset_path=merger.get_dataset_location()
-#     )
-
-# ==================== 
-#       ANALYZIS
-# ====================
-# analyzer = Analyzer(epochs=epochs)
-#
-# analyzer.analyze_epochs()
-# # analyzer.analyze_predictions()
-# analyzer.create_plots_figure(
-#     length_epochs_list=len(epochs)
-# )
-
-# for epo in epochs:
-#     path = "./experimental_reports/"
-#     filename = str(epo)+"_epo.md"
-#     with open(path+filename, "w") as md_file:
-#         md_file.write(generate_header(
-#             epochs_list=epo,
-#             batch_size=300,
-#             vocab_infos=rnn_model.get_infos_obj()
-#         ))
-
 # ========================
 #      ITERATIVE WAY
 # ========================
@@ -111,17 +57,17 @@ for dataset in datasets:
         title=report_title,
         iter_data=[gru_neurons, epochs],
         params={
-            "batch_size": 300,
-            "validation_split": 0.2,
-            "dataset_path": "./datasets/",
-            "learning_rate": 1e-3,
-            "dropout_value": 0.5,
-            "dense_neurons": 128,
-            "loss_function": "sparse_categorical_crossentropy",
-            "dataset_length: ": str(merger.dflgth),
-            "percentage True Negatives: ": str(merger.percentage),
-            "percentage names only": str(merger.percentage_names_only),
-            "percentage other tags: ": str(merger.other_tags)
+            "batch_size ": 300,
+            "validation_split ": 0.2,
+            "dataset_path ": "./datasets/",
+            "learning_rate ": 1e-3,
+            "dropout_value ": 0.5,
+            "dense_neurons ": 128,
+            "loss_function ": "sparse_categorical_crossentropy",
+            "dataset_length ": str(merger.dflgth),
+            "percentage True Negatives ": str(merger.percentage),
+            "percentage names only ": str(merger.percentage_names_only),
+            "percentage other tags ": str(merger.other_tags)
         },
         dtlgth=str(merger.dflgth)
     )
@@ -154,16 +100,55 @@ for dataset in datasets:
     #         # create matplotlib graphs based on json files
     #         # don't need it for the moment, but keep unique graph template to send it to the report
     #         # analyzer.create_plots_figure(length_epochs_list=len(epochs))
-    #
-    #         # append new page to report
-    #         report_writer.write_unique_epoch_page(
-    #             gru_neuron=gru_neuron,
-    #             epoch=epoch,
-    #             acc_valacc_figure=None,
-    #             loss_valloss_figure=None,
-    #             fitting_observations=analyzer.fit_obs(),
-    #             predictions=analyzer.analyze_predictions(),
-    #             bilan=analyzer.bilan()
-    #         )
+            
+            curves_data = {
+                "accuracy": {
+                    "tr_min": 0.27,
+                    "tr_max": 0.69,
+                    "tr_mean": 0.51,
+                    "val_min": 0.26,
+                    "val_max": 0.71,
+                    "val_mean": 0.5
+                }, 
+                "loss": {
+                    "tr_min": 0.27,
+                    "tr_max": 0.68,
+                    "tr_mean": 0.51,
+                    "val_min": 0.26,
+                    "val_max": 0.71,
+                    "val_mean": 0.5
+                }
+            }
+
+            fitting_observations = {
+                "under": "Yes",
+                "over": "No",
+                "good": "Partially"
+            }
+
+            predictions = {
+                'to_predict': "<authors author:\'John Da\'/>",
+                'expected': "author: \'John Da\'",
+                'predicted': "author: \'Mr. Luc Da\'"
+            }
+
+            bilan = {
+                "gap_acc": 0.69,
+                "gap_loss": 0.68,
+                "fit_status": "underfitted",
+                "pred_percent": 56
+            }
+
+            # append new page to report
+            report_writer.write_unique_epoch_page(
+                gru_neuron=gru_neuron,
+                epoch=epoch,
+                acc_valacc_absolute_path="../analysis/compar_epochs/4350/acc_valacc_10.png",
+                loss_valloss_absolute_path="../analysis/compar_epochs/4350/loss_valloss_10.png",
+                curves_data=curves_data,
+                fitting_observations=fitting_observations,
+                predictions=predictions,
+                bilan=bilan
+            )
 
     report_writer.write_last_page(str(merger.dflgth))
