@@ -48,20 +48,20 @@ class ReportWriter:
         # acc
         content += "\n\n![accuracy plot]("+str(acc_valacc_absolute_path)+")\n"
         content += "\n\n<center>\n"
-        content += "\n|          |      Training data      |  Validation data |"
-        content += "\n|:--------:|:-----------------------:|:----------------:|"
-        content += "\n| minimum  | "+str(curves_data['accuracy']['tr_min'])+" | "+str(curves_data['accuracy']['val_min'])+" |"
-        content += "\n| maximum  | "+str(curves_data['accuracy']['tr_max'])+" | "+str(curves_data['accuracy']['val_max'])+" |"
-        content += "\n|   mean   | "+str(curves_data['accuracy']['tr_mean'])+" | "+str(curves_data['accuracy']['val_mean'])+" |\n"
+        content += "\n|          |      Training data      |  Validation data |   Delta   |"
+        content += "\n|:--------:|:-----------------------:|:----------------:|:---------:|"
+        content += "\n| minimum  | "+str(round(curves_data['accuracy']['tr_min'], 4))+" | "+str(round(curves_data['accuracy']['val_min'], 4))+" | "+str(round(abs(curves_data['accuracy']['tr_min']-curves_data['accuracy']['val_min']), 4))+" |"
+        content += "\n| maximum  | "+str(round(curves_data['accuracy']['tr_max'], 4))+" | "+str(round(curves_data['accuracy']['val_max'], 4))+" | "+str(round(abs(curves_data['accuracy']['tr_max']-curves_data['accuracy']['val_max']), 4))+" |"
+        content += "\n|   mean   | "+str(round(curves_data['accuracy']['tr_mean'], 4))+" | "+str(round(curves_data['accuracy']['val_mean'], 4))+" | "+str(round(abs(curves_data['accuracy']['tr_mean']-curves_data['accuracy']['val_mean']), 4))+" |\n"
         content += "\n</center>\n\n"
         # loss
         content += "\n![loss plot]("+str(loss_valloss_absolute_path)+")\n"
         content += "\n\n<center>\n\n"
-        content += "\n|          |      Training data      |  Validation data |"
-        content += "\n|:--------:|:-----------------------:|:----------------:|"
-        content += "\n| minimum  | "+str(curves_data['loss']['tr_min'])+" | "+str(curves_data['loss']['val_min'])+" |"
-        content += "\n| maximum  | "+str(curves_data['loss']['tr_max'])+" | "+str(curves_data['loss']['val_max'])+" |"
-        content += "\n|   mean   | "+str(curves_data['loss']['tr_mean'])+" | "+str(curves_data['loss']['val_mean'])+" |\n"
+        content += "\n|          |      Training data      |  Validation data |  Delta  |"
+        content += "\n|:--------:|:-----------------------:|:----------------:|:-------:|"
+        content += "\n| minimum  | "+str(round(curves_data['loss']['tr_min'], 4))+" | "+str(round(curves_data['loss']['val_min'], 4))+" | "+str(round(abs(curves_data['loss']['tr_min']-curves_data['loss']['val_min']), 4))+" |"
+        content += "\n| maximum  | "+str(round(curves_data['loss']['tr_max'], 4))+" | "+str(round(curves_data['loss']['val_max'], 4))+" | "+str(round(abs(curves_data['loss']['tr_max']-curves_data['loss']['val_max']), 4))+" |"
+        content += "\n|   mean   | "+str(round(curves_data['loss']['tr_mean'], 4))+" | "+str(round(curves_data['loss']['val_mean'], 4))+" | "+str(round(abs(curves_data['loss']['tr_mean']-curves_data['loss']['val_mean']), 4))+ " |\n"
         content += "\n\n</center>\n\n"
 
         # fitting osbervations
@@ -75,14 +75,14 @@ class ReportWriter:
         # predictions
         content += "\n## Predictions"
         content += "\n\n<center>\n"
-        content += "\n|          | Seq. to predict | Expected seq. | Predicted seq. |"
-        content += "\n|:--------:|:---------------:|:-------------:|:--------------:|"
-        content += "\n|  Seq.  | "+str(predictions['to_predict'])+" | "+str(predictions['expected'])+" | "+str(predictions['predicted'])+" |\n"
+        content += "\n|          |          Seq. to predict           |          Expected seq.           |          Predicted seq.           |"
+        content += "\n|:--------:|:----------------------------------:|:--------------------------------:|:---------------------------------:|"
+        content += "\n|   Seq.   | "+str(predictions['to_predict'])+" | "+str(predictions['expected'])+" | "+str(predictions['predicted'])+" |\n"
         content += "\n\n</center>\n\n"
 
         # bilan
         content += "\n## Bilan"
-        content += "\nFor **"+str(gru_neuron)+"** neurons in GRU and **"+str(epoch)+"** epochs, the training accuracy is gapped at **"+str(bilan['gap_acc'])+"**, the training loss at **"+str(bilan['gap_loss'])+"**. The model is **"+str(bilan['fit_status'])+"** and the prediction is correct at **"+str(bilan['pred_percent'])+"%**.\n"
+        content += "\nFor **"+str(gru_neuron)+"** neurons in GRU and **"+str(epoch)+"** epochs, the training accuracy is gapped at **"+str(round(bilan['gap_acc'], 2))+"**, the training loss at **"+str(round(bilan['gap_loss'], 2))+"**. The model is **"+str(bilan['fit_status'])+"** and the prediction is correct at **"+str(round(bilan['pred_percent'], 2))+"%**.\n"
         content += "<br><br>"
 
         with open(self.path+"/"+self.filename, 'a') as md_file:

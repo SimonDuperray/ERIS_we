@@ -35,8 +35,8 @@ class Analyzer:
         txt = f'$\Delta='+str(delta)+"$"
         text_x_pos = 2 + float(obj['epochs'][-1]) * 7 / 80
         plt.text(
-            text_x_pos,
-            float(min(obj['accuracy']))+0.1,
+            min(obj['epochs']),
+            (103*min(obj['accuracy']))/100,
             txt,
             fontsize=8
         )
@@ -58,8 +58,8 @@ class Analyzer:
         txt = f'$\Delta='+str(delta)+"$"
         text_x_pos = 2 + float(obj['epochs'][-1]) * 7 / 80
         plt.text(
-            text_x_pos,
-            float(min(obj['loss']))-0.5,
+            min(obj['epochs']),
+            (103*min(obj['loss']))/100,
             txt,
             fontsize=8
         )
@@ -293,6 +293,12 @@ class Analyzer:
         # TODO
         pass
 
-    def bilan(self):
-        # TODO
-        pass
+    def confidence_percentage(li):
+        if len(li[1])<len(li[0]):
+            for i in range(len(li[0])-len(li[1])):
+                predicted_splitted.append("...")
+        eq = 0
+        for exp, pre in zip(li[0], li[1]):
+            if exp == pre:
+                eq += 1
+        return eq * 100 / len(li[0])

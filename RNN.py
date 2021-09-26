@@ -27,6 +27,14 @@ class RNNModel:
         self.percentage_true_neg = 0
         self.infos = None
         self.df_length = df_length
+        self.to_predict = ""
+        self.predicted = ""
+
+    def get_to_predict(self):
+        return self.to_predict
+
+    def get_predicted(self):
+        return self.predicted
 
     def set_percent(self, perc):
         self.percentage_true_neg = perc
@@ -264,8 +272,12 @@ class RNNModel:
         # log message
         print(f"Current model is saved in {path_model}")
 
-        history_const.history['to_predict'] = self.get_init_sequence(tmp_x[:1][0], self.out_tk.word_index)
-        history_const.history['prediction'] = self.logits_to_text(embed_rnn_model.predict(tmp_x[:1])[0], self.out_tk)
+        self.to_predict = self.get_init_sequence(tmp_x[:1][0], self.out_tk.word_index)
+        self.predicted = self.logits_to_text(embed_rnn_model.predict(tmp_x[:1])[0], self.out_tk)
+
+        history_const.history['init_seq'] = "init sequence"
+        history_const.history['to_predict'] = self.to_predict
+        history_const.history['prediction'] = self.predicted
 
         filename = path + "/f--" + directory + ".json"
 

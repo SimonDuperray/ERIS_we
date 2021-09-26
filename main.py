@@ -5,6 +5,13 @@ from ReportWriter import ReportWriter
 from os import listdir
 from os.path import join
 import tensorflow as tf
+import json
+
+def average_list(li):
+    return sum(li)/len(li)
+
+# TODO: fitting observations
+# TODO: confidence percentage of prediction
 
 # ========================
 #      ITERATIVE WAY
@@ -32,10 +39,10 @@ datasets = [
 ]
 
 # gru_neurons = [32, 64, 128, 256, 512]
-gru_neurons = [64, 128]
+gru_neurons = [128]
 
 # epochs = [i for i in range(10, 110, 10)]
-epochs = [2, 4, 6]
+epochs = [2, 4]
 
 for dataset in datasets:
     # create dataset
@@ -127,28 +134,27 @@ for dataset in datasets:
                 path_acc=path_acc,
                 path_loss=path_loss
             )
-
-            # create matplotlib graphs based on json files
-            # don't need it for the moment, but keep unique graph template to send it to the report
-            # analyzer.create_plots_figure(length_epochs_list=len(epochs))
             
-            curves_data = {
-                "accuracy": {
-                    "tr_min": 0.27,
-                    "tr_max": 0.69,
-                    "tr_mean": 0.51,
-                    "val_min": 0.26,
-                    "val_max": 0.71,
-                    "val_mean": 0.5
-                }, 
-                "loss": {
-                    "tr_min": 0.27,
-                    "tr_max": 0.68,
-                    "tr_mean": 0.51,
-                    "val_min": 0.26,
-                    "val_max": 0.71,
-                    "val_mean": 0.5
-                }
+            # get data from file
+            with open("./histories/"+str(merger.dflgth)+"/"+dir+"/"+file, 'r') as outfile:
+                data = json.load(outfile)
+
+            curves_data = {}
+            curves_data['accuracy'] = {
+                "tr_min": min(data['accuracy']),
+                "tr_max": max(data['accuracy']),
+                "tr_mean": average_list(data['accuracy']),
+                "val_min": min(data['val_accuracy']),
+                "val_max": max(data['val_accuracy']),
+                "val_mean": average_list(data['val_accuracy'])
+            }
+            curves_data['loss'] = {
+                "tr_min": min(data['loss']),
+                "tr_max": max(data['loss']),
+                "tr_mean": average_list(data['loss']),
+                "val_min": min(data['val_loss']),
+                "val_max": max(data['val_loss']),
+                "val_mean":average_list(data['val_loss']) 
             }
 
             fitting_observations = {
@@ -158,17 +164,25 @@ for dataset in datasets:
             }
 
             predictions = {
-                'to_predict': "<authors author:\'John Da\'/>",
-                'expected': "author: \'John Da\'",
-                'predicted': "author: \'Mr. Luc Da\'"
+                'to_predict': data['init_seq'],
+                'expected': data['to_predict'],
+                'predicted': data['prediction']
             }
 
+            print("\n\n\n======\n"+str(rnn_model.get_to_predict().split())+"\n======\n\n\n")
+            print("\n\n\n======\n"+str(rnn_model.get_predicted().split())+"\n======\n\n\n")
+
             bilan = {
-                "gap_acc": 0.69,
-                "gap_loss": 0.68,
+                "gap_acc": max(data['accuracy']),
+                "gap_loss": min(data['loss']),
                 "fit_status": "underfitted",
-                "pred_percent": 56
+                "pred_percent": analyzer.confidence_percentage(
+                    li=[data['to_predict'].split(), data['prediction'].split()]
+                )
             }
+
+            # expected=rnn_model.get_to_predict().split(),
+            # predicted=rnn_model.get_predicted().split()
 
             # append new page to report
             report_writer.write_unique_epoch_page(
@@ -181,6 +195,8 @@ for dataset in datasets:
                 predictions=predictions,
                 bilan=bilan
             )
+
+            bilan = {}
 
         report_writer.write_last_page(
             dtlgth=str(merger.dflgth),
