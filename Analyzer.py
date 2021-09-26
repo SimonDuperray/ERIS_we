@@ -21,22 +21,48 @@ class Analyzer:
             obj['val_loss'] = data['val_loss']
 
         # acc / val_acc
-        plt.plot(obj['epochs'], obj['accuracy'], color='red')
-        plt.plot(obj['epochs'], obj['val_accuracy'], color='blue')
+        plt.plot(obj['epochs'], obj['accuracy'])
+        plt.plot(obj['epochs'], obj['val_accuracy'], linestyle='--')
         plt.title("Training and Validation Accuracy")
         plt.xlabel('epochs')
         plt.ylabel('accuracy')
+        plt.scatter(obj['epochs'][-1], obj['accuracy'][-1], color='red')
+        plt.scatter(obj['epochs'][-1], obj['val_accuracy'][-1], color='red')
+        plt.plot([obj['epochs'][-1], obj['epochs'][-1]], [obj['accuracy'][-1], obj['val_accuracy'][-1]], color='red')
         plt.legend(['train_acc', 'val_acc'])
+        plt.grid()
+        delta = abs(obj['accuracy'][-1]-obj['val_accuracy'][-1])
+        txt = f'$\Delta='+str(delta)+"$"
+        text_x_pos = 2 + float(obj['epochs'][-1]) * 7 / 80
+        plt.text(
+            text_x_pos,
+            float(min(obj['accuracy']))+0.1,
+            txt,
+            fontsize=8
+        )
         plt.savefig(path_acc)
         plt.show()
 
         # loss / val_loss
-        plt.plot(obj['epochs'], obj['loss'], color='red')
-        plt.plot(obj['epochs'], obj['val_loss'], color='blue')
+        plt.plot(obj['epochs'], obj['loss'])
+        plt.plot(obj['epochs'], obj['val_loss'], linestyle='--')
         plt.title("Training and Validation Loss")
         plt.xlabel('epochs')
         plt.ylabel('loss')
+        plt.scatter(obj['epochs'][-1], obj['loss'][-1], color='red')
+        plt.scatter(obj['epochs'][-1], obj['val_loss'][-1], color='red')
+        plt.plot([obj['epochs'][-1], obj['epochs'][-1]], [obj['loss'][-1], obj['val_loss'][-1]], color='red')
         plt.legend(['train_loss', 'val_loss'])
+        plt.grid()
+        delta = abs(obj['loss'][-1]-obj['val_loss'][-1])
+        txt = f'$\Delta='+str(delta)+"$"
+        text_x_pos = 2 + float(obj['epochs'][-1]) * 7 / 80
+        plt.text(
+            text_x_pos,
+            float(min(obj['loss']))-0.5,
+            txt,
+            fontsize=8
+        )
         plt.savefig(path_loss)
         plt.show()
 
